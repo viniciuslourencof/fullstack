@@ -1,7 +1,7 @@
-import GlobalStyle from "../styles/global";
+import GlobalStyle from "./styles/global";
 import styled from "styled-components";
-import Form from "./FormEquipe.js";
-import Grid from "./GridEquipe";
+import Form from "./components/FormJogadores";
+import Grid from "./components/GridJogadores";
 import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -20,30 +20,30 @@ const Container = styled.div`
 
 const Title = styled.h2``;
 
-function Equipe() {
+function Jogador() {
 
-    const [equipes, setEquipes] = useState([]);
+    const [jogadores, setJogadores] = useState([]);
     const [onEdit, setOnEdit] = useState(null);
   
-    const getEquipes = async () => {
+    const getJogadores = async () => {
       try {
-        const res = await axios.get("http://localhost:8800/equipe");
-        setEquipes(res.data.sort((a, b) => (a.nome > b.nome ? 1 : -1)));
+        const res = await axios.get("http://localhost:8800/jogador");
+        setJogadores(res.data.sort((a, b) => (a.nome > b.nome ? 1 : -1)));
       } catch (error) {
         toast.error(error);
       }
     };
   
     useEffect(() => {
-      getEquipes();
-    }, [setEquipes]);
+      getJogadores();
+    }, [setJogadores]);
 
   return (
     <>
       <Container>
-        <Title>EQUIPES</Title>
-        <Form onEdit={onEdit} setOnEdit={setOnEdit} getEquipes={getEquipes} />
-        <Grid setOnEdit={setOnEdit} equipes={equipes} setEquipes={setEquipes} />
+        <Title>Jogadores</Title>
+        <Form onEdit={onEdit} setOnEdit={setOnEdit} getJogadores={getJogadores} />
+        <Grid setOnEdit={setOnEdit} jogadores={jogadores} setJogares={setJogadores} />
       </Container>
       <ToastContainer autoClose={3000} position={toast.POSITION.BOTTOM_LEFT} />
       <GlobalStyle />
@@ -51,4 +51,4 @@ function Equipe() {
   );
 }
 
-export default Equipe;
+export default Jogador;

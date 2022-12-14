@@ -39,87 +39,68 @@ const Button = styled.button`
   height: 42px;
 `;
 
-const Form = ({ getUsers, onEdit, setOnEdit }) => {
+const FormJogador = ({ getJogadores, onEdit, setOnEdit }) => {
   const ref = useRef();
 
   useEffect(() => {
     if (onEdit) {
-      const user = ref.current;
+      const jogadores = ref.current;
 
-      user.nome.value = onEdit.nome;
-      user.email.value = onEdit.email;
-      user.fone.value = onEdit.fone;
-      user.data_nascimento.value = onEdit.data_nascimento;
+      jogadores.nome.value = onEdit.nome;      
+      jogadores.equipe_idequipe.value = onEdit.equipe_idequipe;      
     }
   }, [onEdit]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const user = ref.current;
+    const jogador = ref.current;
 
     if (
-      !user.nome.value ||
-      !user.email.value ||
-      !user.fone.value ||
-      !user.data_nascimento.value
+      !jogador.nome.value ||       
+      !jogador.equipe_idequipe.value       
     ) {
       return toast.warn("Preencha todos os campos!");
     }
 
     if (onEdit) {
       await axios
-        .put("http://localhost:8800/" + onEdit.id, {
-          nome: user.nome.value,
-          email: user.email.value,
-          fone: user.fone.value,
-          data_nascimento: user.data_nascimento.value,
+        .put("http://localhost:8800/jogador/" + onEdit.idjogador, {
+          nome: jogador.nome.value,          
+          equipe_idequipe: jogador.nome.equipe_idequipe          
         })
         .then(({ data }) => toast.success(data))
-        .catch(({ data }) => toast.error(data));
+        .catch(({ data }) => toast.error(data));        
     } else {
       await axios
-        .post("http://localhost:8800", {
-          nome: user.nome.value,
-          email: user.email.value,
-          fone: user.fone.value,
-          data_nascimento: user.data_nascimento.value,
+        .post("http://localhost:8800/jogador", {
+          nome: jogador.nome.value,
+          equipe_idequipe: jogador.nome.equipe_idequipe   
         })
         .then(({ data }) => toast.success(data))
         .catch(({ data }) => toast.error(data));
     }
 
-    user.nome.value = "";
-    user.email.value = "";
-    user.fone.value = "";
-    user.data_nascimento.value = "";
+    jogador.nome.value = "";    
+    jogador.nome.equipe_idequipe = "";    
 
     setOnEdit(null);
-    getUsers();
+    getJogadores();
   };
 
   return (
     <FormContainer ref={ref} onSubmit={handleSubmit}>
       <InputArea>
         <Label>Nome</Label>
-        <Input name="nome" />
-      </InputArea>
+        <Input name="nome"/>
+      </InputArea>     
       <InputArea>
-        <Label>E-mail</Label>
-        <Input name="email" type="email" />
-      </InputArea>
-      <InputArea>
-        <Label>Telefone</Label>
-        <Input name="fone" />
-      </InputArea>
-      <InputArea>
-        <Label>Data de Nascimento</Label>
-        <Input name="data_nascimento" type="date" />
-      </InputArea>
-
+        <Label>Equipe</Label>
+        <Input name="equipe_idequipe"/>
+      </InputArea>     
       <Button type="submit">SALVAR</Button>
     </FormContainer>
   );
 };
 
-export default Form;
+export default FormJogador;
